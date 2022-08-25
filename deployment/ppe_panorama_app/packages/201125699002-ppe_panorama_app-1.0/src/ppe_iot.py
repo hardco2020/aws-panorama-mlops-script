@@ -28,9 +28,9 @@ log = logging.getLogger("my_logger")
 def ppe_handler(image_to_send, cor_data, env):
     iot_client = boto3.client("iot-data", region_name="ap-southeast-1")
     s3_client = boto3.resource("s3", region_name="ap-southeast-1")
-    random_p = boto3.client("ssm", region_name="ap-southeast-1").get_parameter(
-        Name="/ppe/random/" + env
-    )
+    sql_command = "/ppe/random/" + env
+    log.info("sql_command", sql_command)
+    random_p = boto3.client("ssm", region_name="ap-southeast-1").get_parameter(Name=sql_command)
     prefix = "ppe"
     # device_id = 'cf2533b6-2541-4347-a68c-404742578e14'
     # camera_id = 'cf2533b6-2541-4347-a68c-404742578e14'
@@ -70,9 +70,7 @@ def ppe_handler(image_to_send, cor_data, env):
     event_data["picture"] = s3_picture + event_data["picture_filename"]
 
     event_data["origin_picture_filename"] = file_name_prefix + "_origin" + ".jpg"
-    event_data["origin_picture_path"] = (
-        picture_path + event_data["origin_picture_filename"]
-    )
+    event_data["origin_picture_path"] = picture_path + event_data["origin_picture_filename"]
     event_data["origin_picture"] = s3_picture + event_data["origin_picture_filename"]
 
     event_data["label_filename"] = file_name_prefix + ".txt"
@@ -92,30 +90,18 @@ def ppe_handler(image_to_send, cor_data, env):
 
     copy_to_send = copy.deepcopy(image_to_send)
     # raw image, draw cordon
-    cv2.rectangle(
-        copy_to_send, _cordon_coordinates[0], _cordon_coordinates[2], (0, 255, 255), 2
-    )
+    cv2.rectangle(copy_to_send, _cordon_coordinates[0], _cordon_coordinates[2], (0, 255, 255), 2)
     raw_serial = cv2.imencode(".png", copy_to_send)[1].tostring()
-    s3_client.Object(bucket, event_data["origin_picture_path"]).put(
-        Body=raw_serial, ContentType="image/PNG"
-    )
+    s3_client.Object(bucket, event_data["origin_picture_path"]).put(Body=raw_serial, ContentType="image/PNG")
 
     for _person_coordinate in _person_coordinates:
-        cv2.rectangle(
-            copy_to_send, _person_coordinate[0], _person_coordinate[2], (255, 0, 0), 2
-        )
+        cv2.rectangle(copy_to_send, _person_coordinate[0], _person_coordinate[2], (255, 0, 0), 2)
 
-    cv2.rectangle(
-        copy_to_send, _cordon_coordinates[0], _cordon_coordinates[2], (0, 255, 255), 2
-    )
+    cv2.rectangle(copy_to_send, _cordon_coordinates[0], _cordon_coordinates[2], (0, 255, 255), 2)
     bbox_serial = cv2.imencode(".png", copy_to_send)[1].tostring()
-    s3_client.Object(bucket, event_data["picture_path"]).put(
-        Body=bbox_serial, ContentType="image/PNG"
-    )
+    s3_client.Object(bucket, event_data["picture_path"]).put(Body=bbox_serial, ContentType="image/PNG")
 
-    s3_client.Object(bucket, event_data["label_path"]).put(
-        Body=_label_coordinates, ContentType="text/plain"
-    )
+    s3_client.Object(bucket, event_data["label_path"]).put(Body=_label_coordinates, ContentType="text/plain")
 
     payload = json.dumps(event_data)
     # log.info('End of uploading to S3')
