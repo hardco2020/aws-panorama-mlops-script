@@ -22,16 +22,8 @@ phases:
       - export CODE_PACKAGE_NAME='PEOPLE_COUNTER_CODE'
       - export MODEL_PACKAGE_NAME='SSD_MODEL'
       - wget https://panorama-starter-kit.s3.amazonaws.com/public/v2/Models/ssd_512_resnet50_v1_voc.tar.gz -O ssd_512_resnet50_v1_voc.tar.gz
-      - >
-        panorama-cli add-raw-model \
-        --model-asset-name model_asset \
-        --model-local-path ./ssd_512_resnet50_v1_voc.tar.gz \
-        --descriptor-path packages/$ACCOUNT_ID-$MODEL_PACKAGE_NAME-1.0/descriptor.json  \
-        --packages-path packages/$ACCOUNT_ID-$MODEL_PACKAGE_NAME-1.0
-      - >
-        panorama-cli build \
-        --container-asset-name code_asset \
-        --package-path packages/$ACCOUNT_ID-$CODE_PACKAGE_NAME-1.0
+      - panorama-cli add-raw-model --model-asset-name model_asset --model-local-path ./ssd_512_resnet50_v1_voc.tar.gz --descriptor-path packages/$ACCOUNT_ID-$MODEL_PACKAGE_NAME-1.0/descriptor.json  --packages-path packages/$ACCOUNT_ID-$MODEL_PACKAGE_NAME-1.0
+      - panorama-cli build --container-asset-name code_asset --package-path packages/$ACCOUNT_ID-$CODE_PACKAGE_NAME-1.0
       - panorama-cli package-application
       - aws s3 cp graphs/people_counter/graph.json $GRAPH_S3
       - >
