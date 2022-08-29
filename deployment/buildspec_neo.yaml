@@ -12,7 +12,7 @@ phases:
       - echo Nothing to do in the pre_build phase...
   build:
     commands: # TODO: download from S3 and upload to S3, rmb to grant S3 access to IAM.
-      - cd deployment/people_counter
+      - cd deployment/people_counter/people_counter_app
       - echo $DB_TABLE_NAME
       - echo $MODEL_NAME
       - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
