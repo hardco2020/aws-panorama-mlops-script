@@ -35,9 +35,7 @@ go to the **aws-panorama-mlops** repo you forked earlier when deploying PPE
 
 go to **amplify/backend/custom/customResource/customResource-cloudformation-template.yaml, you will see the following code** 
 
-
-[Image: Image.jpg]
-At the line289, you will see we clone the **ppa_model_script** repo, change the repo to be your account 
+At the line301, you will see we clone the **ppa_model_script** repo, change the repo to be your account 
 
 ![Screen Shot 2022-08-24 at 2 59 16 PM](https://user-images.githubusercontent.com/61721490/186351900-037e4b60-4cb2-44ef-87de-d70865e54334.png)
 
@@ -95,7 +93,7 @@ you will see the following code.
 
 ![Screen Shot 2022-08-24 at 3 04 37 PM](https://user-images.githubusercontent.com/61721490/186352944-8aeac086-7608-4d60-af27-35ea15e98860.png)
 
-Change the line 476 to be your account name 
+Change the line 496 to be your account name 
 
 ```
 Location: https://github.com/<your_github_account>/aws-panorama-mlops-script.git
