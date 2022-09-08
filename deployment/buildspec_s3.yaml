@@ -15,11 +15,10 @@ phases:
       - echo $DB_TABLE_NAME
       - echo $MODEL_NAME
       - echo $GRAPH_S3
-      - echo $APP_S3_Uri          # Output the APP_NAME
+      - echo $APP_S3_Uri          # Output the APP_S3_Uri
       - aws s3 cp $APP_S3_Uri ./  # pull the zip file to the local 
-      - unzip $APP_Name_Zip          #unzip
+      - unzip $APP_Name          #unzip
       - cd $APP_Name  
-      - pwd
       - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
       - aws s3 cp $MODEL_S3 ./
