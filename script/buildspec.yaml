@@ -15,6 +15,7 @@ phases:
       - cd script
       - aws s3 cp training-input/ $PRETRAIN_BUCKET --recursive
       - bash test_pull_and_push.sh ap-southeast-1
+      - bash test2_pull_and_push.sh ap-southeast-1
 
   post_build:
     commands:
